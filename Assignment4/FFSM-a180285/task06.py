@@ -18,17 +18,21 @@ for s, p, o in g:
 # **TASK 6.1: Create a new class named "University"**
 g.add((ns.University, RDF.type, RDFS.Class))
 
+print("\n\n 6.1 Check new Class (University)")
 for s, p, o in g.triples((None, RDF.type, RDFS.Class)):
   print(s,p,o)
 
 # **TASK 6.2: Add "Researcher" as a subclass of "Person"**
 g.add((ns.Researcher, RDFS.subClassOf, ns.Person))
+
+print("\n\n 6.2 Check new subClassOf Person (Researcher)")
 for s, p, o in g.triples((None, RDFS.subClassOf, ns.Person)):
   print(s,p,o)
 
 # **TASK 6.3: Create a new individual of Researcher named "Jane Smith"**
 g.add((ns.JaneSmith, RDF.type, ns.Researcher))
 
+print("\n\n 6.3 Check that JaneSmith Data")
 for s, p, o in g.triples((ns.JaneSmith, None, None)):
   print(s,p,o)
 
@@ -36,6 +40,8 @@ for s, p, o in g.triples((ns.JaneSmith, None, None)):
 g.add((ns.JaneSmith, VCARD.FN, Literal("Jane Smith", datatype=XSD.string)))
 g.add((ns.JaneSmith, VCARD.Given, Literal("Jane", datatype=XSD.string)))
 g.add((ns.JaneSmith, VCARD.Family, Literal("Smith", datatype=XSD.string)))
+
+print("\n\n 6.4 Check that JaneSmith Data")
 for s, p, o in g.triples((ns.JaneSmith, None, None)):
   print(s,p,o)
 
@@ -50,12 +56,6 @@ g.add((ns.worksIn, RDFS.range, ns.University))
 # Create the relationship 
 g.add((ns.JonhSmith, ns.workIn, ns.UPM))
 
-for s, p, o in g.triples((ns.worksIn, None, None)):
+print("\n\n 6.5 Check that JonhSmith workIn UPM")
+for s, p, o in g.triples((ns.JonhSmith, ns.workIn, ns.UPM)):
   print(s,p,o)
-
-print("\n\nThis is the final graph! 🎉")
-
-for s, p, o in g:
-  print(s,p,o)
-
-print("This is an amazing graph! 🎂")
