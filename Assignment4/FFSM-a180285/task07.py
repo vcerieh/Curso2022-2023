@@ -28,16 +28,30 @@ for r in g.query(q1):
 
 # **TASK 7.2: List all individuals of "Person" with RDFLib and SPARQL (remember the subClasses)**
 q2 = prepareQuery('''
-  SELECT ?person 
+  SELECT ?person ?clss 
   WHERE { 
-    ?person rdf:type ns:Person .
+    {
+      SELECT ?person ?clss
+      WHERE {
+        BIND(ns:Person as ?clss)
+        ?person a ?clss.
+      }
+    }
+    UNION
+    {
+      SELECT ?person ?clss
+      WHERE {
+        ?clss rdfs:subClassOf ns:Person .
+        ?person a ?clss .
+      }
+    }
   }''',
-  initNs = {"ns": NS, "rdf":RDF}
+  initNs = {"ns": NS, "rdf":RDF, "rdfs":RDFS}
 )
 
 print("\n 7.2 Result")
 for r in g.query(q2):
-  print(f"{r.person} is a {NS.Person}")
+  print(f"{r.person} is a {r.clss}")
 
 # **TASK 7.3: List all individuals of "Person" and all their properties including their class with RDFLib and SPARQL**
 
