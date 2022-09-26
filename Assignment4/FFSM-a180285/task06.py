@@ -54,8 +54,8 @@ g.add((ns.worksIn, RDFS.domain, ns.Person))
 g.add((ns.worksIn, RDFS.range, ns.University))
 
 # Create the relationship 
-g.add((ns.JonhSmith, ns.workIn, ns.UPM))
+g.add((ns.JonhSmith, ns.worksIn, ns.UPM))
 
-print("\n\n 6.5 Check that JonhSmith workIn UPM")
-for s, p, o in g.triples((ns.JonhSmith, ns.workIn, ns.UPM)):
+print("\n\n 6.5 Check that JonhSmith worksIn UPM")
+for s, p, o in g.triples((ns.JonhSmith, ns.worksIn, ns.UPM)):
   print(s,p,o)
