@@ -21,37 +21,42 @@ q1 = prepareQuery('''
   initNs = {"ns": NS, "rdfs":RDFS}
 )
 
-print("\n 7.1 Result")
+print("\n 7.1 Result Sparql:")
 for r in g.query(q1):
   print(f"{r.any} is subClass of {NS.Person}")
 
+print("\n 7.1 Result RDFLib:")
+for subC,_,_ in g.triples((None, RDFS.subClassOf, NS.Person)):
+  print(f"{subC} is subClass of {NS.Person}")
 
 # **TASK 7.2: List all individuals of "Person" with RDFLib and SPARQL (remember the subClasses)**
 q2 = prepareQuery('''
   SELECT ?person ?clss 
   WHERE { 
     {
-      SELECT ?person ?clss
-      WHERE {
-        BIND(ns:Person as ?clss)
-        ?person a ?clss.
-      }
+      BIND(ns:Person as ?clss)
+      ?person a ?clss.
     }
     UNION
     {
-      SELECT ?person ?clss
-      WHERE {
-        ?clss rdfs:subClassOf ns:Person .
-        ?person a ?clss .
-      }
+      ?clss rdfs:subClassOf ns:Person .
+      ?person a ?clss .
     }
   }''',
   initNs = {"ns": NS, "rdf":RDF, "rdfs":RDFS}
 )
 
-print("\n 7.2 Result")
+print("\n 7.2 Result SparQL:")
 for r in g.query(q2):
   print(f"{r.person} is a {r.clss}")
+
+print("\n 7.2 Result RDFLib:")
+for s,_,_ in g.triples((None, RDF.type, NS.Person)):
+  print(f"{s} is a {NS.Person}")
+
+for subC,_,_ in g.triples((None, RDFS.subClassOf, NS.Person)):
+  for s,_,_ in g.triples((None, RDF.type, subC)):
+    print(f"{s} is a {subC}")
 
 # **TASK 7.3: List all individuals of "Person" and all their properties including their class with RDFLib and SPARQL**
 
@@ -60,21 +65,14 @@ q3 = prepareQuery('''
   SELECT ?person ?prop ?value
   WHERE {
     {
-      SELECT ?person ?prop ?value
-      WHERE {
-        BIND(ns:Person as ?clss)
-        ?person a ?clss ;
-          ?prop ?value .
-      }
+      ?person a ns:Person ;
+        ?prop ?value .
     }
     UNION
     {
-      SELECT ?person ?prop ?value
-      WHERE {
-        ?clss rdfs:subClassOf ns:Person .
-        ?person a ?clss ;
-          ?prop ?value .
-      }
+      ?clss rdfs:subClassOf ns:Person .
+      ?person a ?clss ;
+        ?prop ?value .
     }
   }''',
   initNs = {"ns": NS, "rdf":RDF, "rdfs":RDFS}
@@ -86,7 +84,7 @@ for person, prop, value in g.query(q3):
 
 df = pd.DataFrame(q3a_result, columns =['Person', 'Property', 'Value'])
 
-print("\n7.3a result Sparql🚀 ")
+print("\n 7.3a result Sparql🚀")
 print(df)
 
 # Using RDFLib:
@@ -103,7 +101,7 @@ for subclss,_,_ in g.triples((None, RDFS.subClassOf, NS.Person)):
 
 df = pd.DataFrame(q3b_result, columns =['Person', 'Property', 'Value'])
 
-print("\n7.3b result RDFLib🚀 ")
+print("\n 7.3b result RDFLib🚀")
 print(df)
 
 
