@@ -58,11 +58,26 @@ for r in g.query(q2):
 # Using SPARQL:
 q3 = prepareQuery('''
   SELECT ?person ?prop ?value
-  WHERE { 
-    ?person rdf:type ns:Person ;
-      ?prop ?value .
+  WHERE {
+    {
+      SELECT ?person ?prop ?value
+      WHERE {
+        BIND(ns:Person as ?clss)
+        ?person a ?clss ;
+          ?prop ?value .
+      }
+    }
+    UNION
+    {
+      SELECT ?person ?prop ?value
+      WHERE {
+        ?clss rdfs:subClassOf ns:Person .
+        ?person a ?clss ;
+          ?prop ?value .
+      }
+    }
   }''',
-  initNs = {"ns": NS, "rdf":RDF}
+  initNs = {"ns": NS, "rdf":RDF, "rdfs":RDFS}
 )
 
 q3a_result = []
@@ -79,6 +94,12 @@ q3b_result = []
 for person,_,_ in g.triples((None, RDF.type, NS.Person)):
   for _,prop,value in g.triples((person, None, None)):
     q3b_result.append((person, f"...{prop[-45:]}", value))
+
+# Umm maybe it could be done differently I don't like this level of complexity..
+for subclss,_,_ in g.triples((None, RDFS.subClassOf, NS.Person)):
+  for person,_,_ in g.triples((None, RDF.type, subclss)):
+    for _,prop,value in g.triples((person, None, None)):
+      q3b_result.append((person, f"...{prop[-45:]}", value))
 
 df = pd.DataFrame(q3b_result, columns =['Person', 'Property', 'Value'])
 
