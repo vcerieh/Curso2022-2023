@@ -1,5 +1,5 @@
 {
-  "@contex": {
+  "@context": {
  	  "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
     "person": "https://oeg.fi.upm.es/ontologies/persons/",
     "teacher": "https://oeg.fi.upm.es/ontologies/teachers/",
@@ -12,7 +12,7 @@
   "@type": "person",
   "firtName": "Zuyi",
   "lastName": "Li",
-  "hometown": "Hujiang",
+  "hasHomeTown": "Hujiang",
   "age": "23",
   "almaMater": "UPM",
   "nameOfFather": "Nai",
