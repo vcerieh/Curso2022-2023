@@ -28,26 +28,26 @@ g.add((ns.Researcher, RDF.type, RDFS.Class))
 for s, p, o in g:
   print(s,p,o)
 
-"""**TASK 6.1: Create a new class named "University"**
+"""**TASK 6.1: Create a new class named "University"**"""
 
 ns = Namespace("http://somewhere#")
 g.add((ns.University, RDF.type, RDFS.Class))
 for s, p, o in g:
   print(s,p,o)
   
-**TASK 6.2: Add "Researcher" as a subclass of "Person"**
+"""**TASK 6.2: Add "Researcher" as a subclass of "Person"**"""
 
 g.add((ns.Researcher, RDFS.subClassOf, ns.Person))
 for s, p, o in g:
   print(s,p,o)
   
-**TASK 6.3: Create a new individual of Researcher named "Jane Smith"**
+"""**TASK 6.3: Create a new individual of Researcher named "Jane Smith"**"""
 
 g.add((ns.JaneSmith, RDF.type, ns.Researcher))
 for s, p, o in g:
   print(s,p,o)
 
-**TASK 6.4: Add to the individual JaneSmith the fullName, given and family names**
+"""**TASK 6.4: Add to the individual JaneSmith the fullName, given and family names**"""
 
 vcard = Namespace("http://www.w3.org/2001/vcard-rdf/3.0#")
 g.add((ns.JaneSmith, vcard.FN, Literal("Jane Smith")))
@@ -56,8 +56,8 @@ g.add((ns.Smith, vcard.Family, Literal("Smith")))
 for s, p, o in g:
   print(s,p,o)
 
-**TASK 6.5: Add UPM as the university where John Smith works**
-"""
+"""**TASK 6.5: Add UPM as the university where John Smith works**"""
+
 g.add((ns.UPM, RDF.type, ns.University))
 g.add((ns.JohnSmith, vcard.work, ns.UPM))
 
