@@ -59,7 +59,8 @@ print("RDFLib")
 for s,p,o in g.triples((None,RDF.type,ns.Person)):
   print(s)
 for s,p,o in g.triples((None,RDFS.subClassOf,ns.Person)):
-  print(s)
+  for s,p,o in g.triples((None,RDF.type,s)):
+    print(s)
 
 print("\nSPARQL")
 # SPARQL
@@ -87,8 +88,9 @@ for s,p,o in g.triples((None,RDF.type,ns.Person)):
   for sub,prop,val in g.triples((s,None,None)):
     print(s,prop,val)
 for s,p,o in g.triples((None,RDFS.subClassOf,ns.Person)):
-  for sub,prop,val in g.triples((s,None,None)):
-    print(s,prop,val)
+  for s,p,o in g.triples((None,RDF.type,s)):
+    for sub,prop,val in g.triples((s,None,None)):
+      print(s,prop,val)
 
 print("\nSPARQL")
 # SPARQL
