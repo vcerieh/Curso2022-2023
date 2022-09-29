@@ -9,11 +9,9 @@ Original file is located at
 **Task 06: Modifying RDF(s)**
 """
 
-!pip install rdflib 
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2021-2022/master/Assignment4/course_materials"
 
 """Leemos el fichero RDF de la forma que lo hemos venido haciendo"""
-
 from rdflib import Graph, Namespace, Literal, XSD
 # XSD from rdflib has been imported
 from rdflib.namespace import RDF, RDFS
@@ -38,7 +36,7 @@ g.add((ns.University, RDF.type, RDFS.Class))
 # Visualize the results
 for s, p, o in g:
   print(s,p,o)
-
+print("--------")
 """**TASK 6.2: Add "Researcher" as a subclass of "Person"**"""
 
 # TO DO
@@ -46,7 +44,7 @@ g.add((ns.Researcher, RDFS.subClassOf, ns.Person))
 # Visualize the results
 for s, p, o in g:
   print(s,p,o)
-
+print("--------")
 """**TASK 6.3: Create a new individual of Researcher named "Jane Smith"**"""
 
 # TO DO
@@ -54,7 +52,7 @@ g.add((ns.JaneSmith, RDF.type, ns.Researcher))
 # Visualize the results
 for s, p, o in g:
   print(s,p,o)
-
+print("--------")
 """**TASK 6.4: Add to the individual JaneSmith the fullName, given and family names**"""
 
 # TO DO
@@ -65,7 +63,7 @@ g.add((ns.JaneSmith, vcard.Family, Literal("Smith", datatype=XSD.string)))
 # Visualize the results
 for s, p, o in g:
   print(s,p,o)
-
+print("--------")
 """**TASK 6.5: Add UPM as the university where John Smith works**"""
 
 # TO DO

@@ -9,7 +9,7 @@ Original file is located at
 **Task 07: Querying RDF(s)**
 """
 
-!pip install rdflib 
+
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2021-2022/master/Assignment4/course_materials"
 
 """Leemos el fichero RDF de la forma que lo hemos venido haciendo"""
@@ -43,6 +43,8 @@ query = prepareQuery('''
   initNs= {"RDFS": rdfs, "ns":ns})
 for result in g.query(query):
   print(result.Subject)
+
+print("--------")
 #for r in g.query(q1):
 #  print(r)
 
@@ -54,9 +56,10 @@ for result in g.query(query):
 # Using rdfslib
 for s,p,o in g.triples((None, RDF.type, ns.Person)) :
   print(s)
-# As we saw in task 7.1, Researcher is a subclass of Person
-for s,p,o in g.triples((None, RDF.type, ns.Researcher)):
-  print(s)
+# We extract all of the subclasses of Person, and iterate the result
+for s,p,o in g.triples((None, RDFS.subClassOf, ns.Person)):
+  for s2,p2,o2 in g.triples((None, RDF.type, s)):
+   print(s2)
 print("--------")
 # Using SPARQL
 query1= prepareQuery('''
@@ -66,17 +69,19 @@ query1= prepareQuery('''
   ''',
   initNs = {"ns":ns})
 query2 = prepareQuery('''
-  SELECT ?Subject WHERE { 
-    ?Subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ns:Researcher
+  SELECT ?s WHERE { 
+    ?Subject RDFS:subClassOf ns:Person .
+    ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?Subject
   } 
   ''',
-  initNs = {"ns":ns})
+  initNs = {"ns":ns, "RDFS":RDFS})
 
 for result in g.query(query1) :
   print(result.Subject)
 for result in g.query(query2) :
-  print(result.Subject)
+  print(result.s)
 # Visualize the results
+print("--------")
 
 """**TASK 7.3: List all individuals of "Person" and all their properties including their class with RDFLib and SPARQL**
 
@@ -87,10 +92,11 @@ for result in g.query(query2) :
 for s,p,o in g.triples((None, RDF.type, ns.Person)):
   for s2,p2,o2 in g.triples((s,None,None)):
     print(s2,p2,o2)
-# Researcher as a subclass of Person
-for s,p,o in g.triples((None, RDF.type, ns.Researcher)):
-  for s2,p2,o2 in g.triples((s,None,None)):
-    print(s2,p2,o2)
+# For all of the Person subclasses
+for s0,p0,o0 in g.triples((None, RDFS.subClassOf, ns.Person)):
+ for s,p,o in g.triples((None, RDF.type, s0)):
+   for s2,p2,o2 in g.triples((s,None,None)):
+     print(s2,p2,o2)
 print("--------")
 # Using SPARQL
 query1 = prepareQuery('''
@@ -103,11 +109,12 @@ query1 = prepareQuery('''
 
 query2 = prepareQuery('''
   SELECT ?s ?p ?o WHERE { 
-    ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ns:Researcher.
+    ?subclass RDFS:subClassOf ns:Person .
+    ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?subclass.
     ?s ?p ?o.
   } 
   ''',
-  initNs = {"ns":ns})
+  initNs = {"ns":ns, "RDFS":RDFS})
 for result in g.query(query1):
   print(result.s, result.p, result.o)
 
