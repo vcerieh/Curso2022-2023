@@ -11,7 +11,7 @@ Original file is located at
 
 #!pip install rdflib
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2021-2022/master/Assignment4/course_materials"
-
+from rdflib.plugins.sparql import prepareQuery
 from rdflib import Graph, Namespace, Literal, URIRef
 g1 = Graph()
 g2 = Graph()
@@ -25,9 +25,32 @@ from rdflib.namespace import RDF, RDFS
 dataorg = Namespace("http://data.org/#")
 esc=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 vcard = Namespace("http://www.w3.org/2001/vcard-rdf/3.0#")
-for r,s,o in g1.triples((None,esc.type,rdflib.term.URIRef('http://data.org#Person'))):
-  for i,j,k in g2.triples((r,None,None)):
-    g1.add((i,j,k))
+rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema#")
+ns = Namespace("http://data.org#")
+q1 = prepareQuery('''
+  SELECT DISTINCT ?s ?given ?mail ?fam WHERE { 
+    ?s rdf:type ns:Person. 
+    OPTIONAL{?s vcard:Given ?given}.
+    OPTIONAL{?s vcard:Family ?fam}.
+     OPTIONAL{?s vcard:EMAIL ?mail}.
+  } 
+  ''',
+  initNs = { "vcard": vcard,"rdfs":rdfs,"ns":ns,"rdf":RDF}
+)
+for r in g1.query(q1):
+  
+    for r2 in g2.query(q1, initBindings={"?s":r.s}):
+      if(r.given == None):
+        if(r2.given!=None):
+          g1.add((r.s,vcard.Given,r2.given))
+      if(r.fam == None):
+        if(r2.fam!=None):
+          g1.add((r.s,vcard.Family,r2.fam))
+      if(r.mail == None):
+        if(r2.mail!=None):
+          g1.add((r.s,vcard.EMAIL,r2.mail))
+
+ 
 
 for r,s,o in g1.triples((None,esc.type,rdflib.term.URIRef('http://data.org#Person'))):
   print(r)

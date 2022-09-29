@@ -59,16 +59,22 @@ from rdflib.plugins.sparql import prepareQuery
 ns = Namespace("http://somewhere#")
 rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema#")
 vcard = Namespace("http://www.w3.org/2001/vcard-rdf/3.0#")
-q1 = prepareQuery('''
-  SELECT ?Subject WHERE { 
-    ?Subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ns:Person
-  } 
+q2 = prepareQuery('''
+  SELECT DISTINCT ?s
+  WHERE { 
+    {
+      ?s rdf:type ns:Person. 
+    }
+    UNION {
+      ?p rdfs:subClassOf* ns:Person.
+            ?s rdf:type ?p
+    }
+  }
   ''',
-  initNs = { "vcard": vcard,"rdfs":rdfs,"ns":ns}
-)
-print("Printeamos los resultados obtenidos con sparql")
-for r in g.query(q1):
-  print(r.Subject)
+                  initNs={"rdfs": RDFS, "rdf": RDF, "ns": ns}
+                  )
+for r in g.query(q2):
+  print(r.s)
 # Visualize the results
 print("------------------------------------------------------------------------------------------------------------------------------------------")
 """**TASK 7.3: List all individuals of "Person" and all their properties including their class with RDFLib and SPARQL**
@@ -87,7 +93,13 @@ rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema#")
 vcard = Namespace("http://www.w3.org/2001/vcard-rdf/3.0#")
 q1 = prepareQuery('''
   SELECT ?Subject ?prop ?ob WHERE { 
-    ?Subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ns:Person.
+ {
+      ?s rdf:type ns:Person. 
+    }
+    UNION {
+      ?p rdfs:subClassOf* ns:Person.
+            ?s rdf:type ?p
+    }
     ?Subject ?prop ?ob.
   } 
   ''',
