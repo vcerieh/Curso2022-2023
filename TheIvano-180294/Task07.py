@@ -6,9 +6,6 @@ Original file is located at
 **Task 07: Querying RDF(s)**
 """
 
-!pip
-install
-rdflib
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2020-2021/master/Assignment4"
 
 """Leemos el fichero RDF de la forma que lo hemos venido haciendo"""
@@ -73,7 +70,7 @@ q2 = prepareQuery('''
       ?s rdf:type ns:Person. 
     }
     UNION {
-      ?p rdfs:subClassOf ns:Person.
+      ?p rdfs:subClassOf* ns:Person. # I think u mean this. Otherwise I saw online that you can add "rdfs:smth/rdfs:smth*". Is that what's missing?
       ?s rdf:type ?p
     }
   }
@@ -89,6 +86,18 @@ for r in g.query(q2):
 """**TASK 7.3: List all individuals of "Person" and all their properties including their class with RDFLib and SPARQL**
 """
 
+# RDFLib
+# TO DO
+
+for s1, p1, o1 in g.triples((None, RDF.type, NameSpaceitor.Person)):
+    for s2, p2, o2 in g.triples((s1, None, None)):
+        print(s2, p2, o2)
+
+for a1, b1, res in g.triples((None, RDFS.subClassOf, NameSpaceitor.Person)):
+    for a2, b2, c2 in g.triples((None, RDF.type, a1)):
+        for a3, b3, c3 in g.triples((a2, None, None)):
+            print(a3, b3, c3)  # not sure if this is what it is expected tbh
+
 # SPARQL
 # TO DO
 
@@ -100,14 +109,14 @@ q3 = prepareQuery('''
        ?s ?p ?o
      } 
     UNION {
-        ?s2 rdfs:subClassOf ns:Person.
+        ?s2 rdfs:subClassOf* ns:Person. #same here
         ?s rdf:type ?s2 .
        ?s ?p ?o
       }
     }
   ''',
-                  initNs={"rdf": RDF, "rdfs": RDFS, "ns": NameSpaceitor}
-                  )
+        initNs={"rdf": RDF, "rdfs": RDFS, "ns": NameSpaceitor}
+    )
 
 # Visualize the results
 for r in g.query(q3):
