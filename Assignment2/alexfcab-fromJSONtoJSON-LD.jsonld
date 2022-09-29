@@ -2,8 +2,8 @@
     "@context": {
         "person": "https://schema.org/Person",
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-        "fullName": "rdfs:label",
-        "hometown": "rdfs:label",
+        "fullName": "https://schema.org/name",
+        "hometown": "https://schema.org/birthPlace",
         "yourAge": "rdfs:label",
         "almaMater": "rdfs:label",
         "nameOfParents": "rdfs:comment",
