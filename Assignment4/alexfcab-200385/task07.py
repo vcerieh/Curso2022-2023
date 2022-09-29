@@ -9,7 +9,7 @@ Original file is located at
 **Task 07: Querying RDF(s)**
 """
 
-!pip install rdflib 
+# !pip install rdflib 
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2021-2022/master/Assignment4/course_materials"
 
 """Leemos el fichero RDF de la forma que lo hemos venido haciendo"""
@@ -27,8 +27,6 @@ g.parse(github_storage+"/rdf/example6.rdf", format="xml")
 ns = Namespace("http://somewhere#")
 for s, p, o in g.triples((None, RDFS.subClassOf, ns.Person)):
   print(s, "is subclass of ", o)
-  for s2, p2, o2 in g.triples((None, RDFS.subClassOf, s)):
-    print(s2, "is subclass of", s, "and subclass of", o)
 
 print("============================")
 #SPARQL
@@ -36,7 +34,7 @@ from rdflib.plugins.sparql import prepareQuery
 q1 = prepareQuery('''
   SELECT DISTINCT ?x
   WHERE{
-	  ?x (rdfs:subClassOf/rdfs:subClassOf*) ns:Person
+	  ?x rdfs:subClassOf ns:Person
   }
   ''',
   initNs = {"rdfs": RDFS, "ns": ns}
