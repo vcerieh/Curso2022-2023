@@ -62,22 +62,22 @@ for s,p,o in g.triples((None, RDFS.subClassOf, ns.Person)):
    print(s2)
 print("--------")
 # Using SPARQL
-query1= prepareQuery('''
-  SELECT ?Subject WHERE { 
-    ?Subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ns:Person
-  } 
-  ''',
-  initNs = {"ns":ns})
+#query1= prepareQuery('''
+#  SELECT ?Subject WHERE { 
+#    ?Subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ns:Person
+#  } 
+#  ''',
+#  initNs = {"ns":ns})
 query2 = prepareQuery('''
-  SELECT ?s WHERE { 
-    ?Subject RDFS:subClassOf ns:Person .
+  SELECT DISTINCT ?s WHERE { 
+    ?Subject RDFS:subClassOf* ns:Person .
     ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?Subject
   } 
   ''',
   initNs = {"ns":ns, "RDFS":RDFS})
 
-for result in g.query(query1) :
-  print(result.Subject)
+#for result in g.query(query1) :
+ # print(result.Subject)
 for result in g.query(query2) :
   print(result.s)
 # Visualize the results
@@ -99,24 +99,24 @@ for s0,p0,o0 in g.triples((None, RDFS.subClassOf, ns.Person)):
      print(s2,p2,o2)
 print("--------")
 # Using SPARQL
-query1 = prepareQuery('''
-  SELECT ?s ?p ?o WHERE { 
-    ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ns:Person.
-    ?s ?p ?o.
-  } 
-  ''',
-  initNs = {"ns":ns})
+#query1 = prepareQuery('''
+#  SELECT ?s ?p ?o WHERE { 
+#    ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ns:Person.
+#    ?s ?p ?o.
+#  } 
+#  ''',
+#  initNs = {"ns":ns})
 
 query2 = prepareQuery('''
-  SELECT ?s ?p ?o WHERE { 
-    ?subclass RDFS:subClassOf ns:Person .
+  SELECT DISTINCT ?s ?p ?o WHERE { 
+    ?subclass RDFS:subClassOf* ns:Person .
     ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?subclass.
     ?s ?p ?o.
   } 
   ''',
   initNs = {"ns":ns, "RDFS":RDFS})
-for result in g.query(query1):
-  print(result.s, result.p, result.o)
+#for result in g.query(query1):
+#  print(result.s, result.p, result.o)
 
 for result in g.query(query2):
   print(result.s, result.p, result.o)
