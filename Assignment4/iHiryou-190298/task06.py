@@ -67,9 +67,10 @@ print("--------")
 """**TASK 6.5: Add UPM as the university where John Smith works**"""
 
 # TO DO
+np = Namespace("http://newPropertiesSpace#")
 g.add((ns.UPM, RDF.type, ns.University))
-g.add((vcard.worksIn, RDF.type, ns.property))
-g.add((ns.JohnSmith, vcard.worksIn, ns.UPM))
+g.add((np.worksIn, RDF.type, ns.property))
+g.add((ns.JohnSmith, np.worksIn, ns.UPM))
 # Visualize the results
 for s, p, o in g:
   print(s,p,o)
