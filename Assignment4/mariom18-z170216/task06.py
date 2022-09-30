@@ -20,7 +20,7 @@ g.add((ns.Researcher, RDFS.subClassOf, ns.Person))
 #for s, p, o in g:
 #  print(s,p,o)
 
-g.add((ns.JaneSmith, RDFS.subClassOf, ns.Person))
+g.add((ns.JaneSmith, RDF.type, ns.Researcher))
 #for s, p, o in g:
 #  print(s,p,o)
 
