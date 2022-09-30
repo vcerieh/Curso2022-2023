@@ -9,7 +9,7 @@ Original file is located at
 **Task 09: Data linking**
 """
 
-#!pip install rdflib
+!pip install rdflib
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2020-2021/master/Assignment4/"
 
 from rdflib import Graph, Namespace, Literal, URIRef
@@ -44,6 +44,7 @@ for r2 in g2.query(q):
   for r1 in rs:
     if(r1[1] == r2.Given and r1[2] == r2.Family):
       g3.add((r1[0], OWL.sameAs, r2.Person))
+      g3.add((r2.Person, OWL.sameAs, r1[0]))
 
 for s,p,o in g3:
   print(s,p,o)
