@@ -69,6 +69,6 @@ g.add((ns.worksAt, RDFS.domain, ns.Person))
 g.add((ns.worksAt, RDF.type, ns.Property))
 g.add((ns.worksAt, RDFS.range, ns.University))
 
-g.add((ns.JohnSmith, vcard.worksAt, ns.UPM))
+g.add((ns.JohnSmith, ns.worksAt, ns.UPM))
 for s,p,o in g:
   print(s,p,o)
