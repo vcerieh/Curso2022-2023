@@ -69,8 +69,8 @@ for s, p, o in g:
 
 print("Task 6.5")
 g.add((ns.UPM, RDF.type, ns.University))
-g.add((vcard.Works, RDF.type, RDFS.Datatype))
-g.add((ns.JohnSmith, vcard.Works, ns.UPM))
+g.add((ns.Works, RDF.type, RDFS.Datatype))
+g.add((ns.JohnSmith, ns.Works, ns.UPM))
 # Visualize the results
 for s, p, o in g:
   print(s,p,o)

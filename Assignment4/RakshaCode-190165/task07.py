@@ -57,7 +57,7 @@ SELECT ?person WHERE {
 """
 q2 = """
 SELECT ?personSubClass WHERE {
-  ?subClass rdfs:subClassOf ns:Person .
+  ?subClass rdfs:subClassOf* ns:Person .
   ?personSubClass rdf:type ?subClass .
 
 }
@@ -90,7 +90,7 @@ SELECT ?person ?pred ?obj WHERE {
 """
 q2 = """
 SELECT ?personSubClass ?pred ?obj WHERE {
-  ?subClass rdfs:subClassOf ns:Person .
+  ?subClass rdfs:subClassOf* ns:Person .
   ?personSubClass rdf:type ?subClass .
   ?personSubClass ?pred ?obj .
 }
