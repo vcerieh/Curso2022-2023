@@ -46,7 +46,7 @@ q2 = prepareQuery('''
   SELECT DISTINCT ?Subject WHERE { 
     {?Subject rdf:type ns:Person. }
     UNION 
-    {?s rdfs:subClassOf ns:Person.
+    {?s rdfs:subClassOf* ns:Person.
     ?Subject rdf:type ?s}
   }
   ''',
@@ -73,7 +73,7 @@ q3 = prepareQuery('''
     {?Subject rdf:type ns:Person.
      ?Subject ?Property ?x}
     UNION 
-    {?s rdfs:subClassOf ns:Person.
+    {?s rdfs:subClassOf* ns:Person.
     ?Subject rdf:type ?s.
     ?Subject ?Property ?x}
   }
