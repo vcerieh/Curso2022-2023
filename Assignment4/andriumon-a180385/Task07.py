@@ -68,7 +68,7 @@ q2 = prepareQuery('''
   }
   UNION
   {
-      ?subclass rdfs:subClassOf <http://somewhere#Person>.
+      ?subclass rdfs:subClassOf* <http://somewhere#Person>.
       ?subject rdf:type ?subclass.
   }
   }
@@ -107,7 +107,7 @@ q3 = prepareQuery('''
   }
   UNION
   {
-      ?subclass rdfs:subClassOf <http://somewhere#Person>.
+      ?subclass rdfs:subClassOf* <http://somewhere#Person>.
       ?subject rdf:type ?subclass;
                ?property ?value.
   }
