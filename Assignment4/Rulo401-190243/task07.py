@@ -9,7 +9,7 @@ Original file is located at
 **Task 07: Querying RDF(s)**
 """
 
-!pip install rdflib 
+#!pip install rdflib 
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2020-2021/master/Assignment4"
 
 """Leemos el fichero RDF de la forma que lo hemos venido haciendo"""
@@ -26,12 +26,20 @@ g.parse(github_storage+"/resources/example6.rdf", format="xml")
 from rdflib.plugins.sparql import prepareQuery
 ns = Namespace("http://somewhere#")
 
-for s,p,o in g.triples((None, RDFS.subClassOf, ns.Person)):
-  print(s)
+print("Subclasses of Person by RDFLib:")
+
+def printSubclasessOf(RDFClass):
+  for s,p,o in g.triples((None, RDFS.subClassOf, RDFClass)):
+    print(s)
+    printSubclasessOf(s)
+
+printSubclasessOf(ns.Person)
+
+print("Subclasses of Person by SPARQL:")
 
 q1 = prepareQuery('''
   SELECT ?Subclasses WHERE { 
-    ?Subclasses RDFS:subClassOf ns:Person. 
+    ?Subclasses RDFS:subClassOf+ ns:Person. 
   }
   ''',
   initNs = { "ns": ns, "RDFS": RDFS}
@@ -42,20 +50,23 @@ for r in g.query(q1):
 
 """**TASK 7.2: List all individuals of "Person" with RDFLib and SPARQL (remember the subClasses)**"""
 
-for s,p,o in g.triples((None, RDF.type, ns.Person)):
-  print(s)
-pSubclass = g.triples((None, RDFS.subClassOf, ns.Person))
-for s,p,o in pSubclass:
-  people = g.triples((None, RDF.type, s))
-  for s,p,o in people:
-    print(s)
+print("Individuals of Person and it subclasses by RDFLib:")
 
+def printIndivFromAClass(RDFClass):
+  for s,p,o in g.triples((None, RDF.type, RDFClass)):
+    print(s)
+  for s,p,o in g.triples((None, RDFS.subClassOf, RDFClass)):
+    printIndivFromAClass(s)
+
+printIndivFromAClass(ns.Person)
+
+print("Individuals of Person and it subclasses by SPARQL:")
 
 q2 = prepareQuery('''
   SELECT DISTINCT ?Person WHERE { 
     {?Person RDF:type ns:Person} UNION
     {?Person RDF:type ?Class.
-    ?Class  RDFS:subClassOf ns:Person}
+    ?Class  RDFS:subClassOf+ ns:Person}
   }
   ''',
   initNs = { "ns": ns, "RDF": RDF, "RDFS": RDFS}
@@ -67,16 +78,18 @@ for r in g.query(q2):
 
 """**TASK 7.3: List all individuals of "Person" and all their properties including their class with RDFLib and SPARQL**"""
 
-for s,p,o in g.triples((None, RDF.type, ns.Person)):
-  for s,p,o in g.triples((s,None,None)):
-    print(s,p)
-pSubclass = g.triples((None, RDFS.subClassOf, ns.Person))
-for s,p,o in pSubclass:
-  people = g.triples((None, RDF.type, s))
-  for s,p,o in people:
+print("Individuals of Person and it subclasses with it properties by RDFLib:")
+
+def printIndivPlusPropertiesFromAClass(RDFClass):
+  for s,p,o in g.triples((None, RDF.type, RDFClass)):
     for s,p,o in g.triples((s,None,None)):
       print(s,p)
+  for s,p,o in g.triples((None, RDFS.subClassOf, RDFClass)):
+    printIndivPlusPropertiesFromAClass(s)
 
+printIndivPlusPropertiesFromAClass(ns.Person)
+
+print("Individuals of Person and it subclasses with it properties by SPARQL:")
 
 q3 = prepareQuery('''
   SELECT ?Person (GROUP_CONCAT(?Property ; separator=" | ") as ?Properties) WHERE{
@@ -85,7 +98,7 @@ q3 = prepareQuery('''
         SELECT DISTINCT ?Person WHERE { 
         {?Person RDF:type ns:Person} UNION
         {?Person RDF:type ?Class.
-        ?Class  RDFS:subClassOf ns:Person}
+        ?Class  RDFS:subClassOf+ ns:Person}
         }
     }
   }GROUP BY ?Person
