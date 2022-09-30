@@ -11,7 +11,10 @@ g.namespace_manager.bind('ns', ns, override=False)
 g.namespace_manager.bind('vcard', VCARD, override=False)
 g.parse(github_storage + "/rdf/example6.rdf", format="xml")
 
-
+#rdflib
+for subj,pred,obj in g.triples((None, RDFS.subClassOf, ns.Person)) :
+ print(subj)
+#sparql
 q1=prepareQuery('''  SELECT ?subj
   WHERE { 
     ?subj rdfs:subClassOf ns:Person. 
@@ -19,6 +22,14 @@ q1=prepareQuery('''  SELECT ?subj
 #for s in g.query(q1):
 #  print(s)
 
+
+
+#rdflib
+for subj,pred,obj in g.triples((None, RDF.type, ns.Person)) :
+  print(subj)
+  for subj2, pred2, obj2 in g.triples((None, RDF.type, subj)):
+      print(subj2)
+#sparql
 q2 = prepareQuery('''  SELECT DISTINCT ?subj
     WHERE { 
       {
@@ -35,6 +46,21 @@ q2 = prepareQuery('''  SELECT DISTINCT ?subj
 #for s in g.query(q2):
  #   print(s)
 
+
+#rdflib
+for subj, pred, obj in g.triples((None, RDF.type, ns.Person)):
+  print(subj)
+  for subj2, pred2, obj2 in g.triples((subj, None, None)):
+      print(pred2)
+
+
+
+for subj, pred, obj in g.triples((None, RDFS.subClassOf, ns.Person)):
+  for subj2, pred2, obj2 in g.triples((None, RDF.type, subj)):
+    print(subj2)
+    for subj3, pred2, obj3 in g.triples((subj2, None, None)):
+      print(pred2)
+#sparql
 q3 = prepareQuery(''' SELECT DISTINCT ?subj ?pred ?obj
     WHERE{
     	{
