@@ -85,13 +85,13 @@ from rdflib import XSD
 vcard=Namespace("http://www.w3.org/2001/vcard-rdf/3.0/")
 ns = Namespace("http://somewhere#")
 g.add((ns.UPM,RDF.type,ns.University))
-g.add((vcard.Works, RDF.type, RDF.Property))
-g.add((vcard.Works, RDFS.range, ns.University))
-g.add((ns.JohnSmith,vcard.Works,ns.UPM))
+g.add((ns.Works, RDF.type, RDF.Property))
+g.add((ns.Works, RDFS.range, ns.University))
+g.add((ns.JohnSmith,ns.Works,ns.UPM))
 print("\n 6.5 resultado")
 for s, p, o in g.triples((ns.UPM,RDF.type,None)):
   print(s,p,o)
-for s, p, o in g.triples((vcard.Works,None,None)):
+for s, p, o in g.triples((ns.Works,None,None)):
   print(s,p,o)
-for s, p, o in g.triples((ns.JohnSmith,vcard.Works,None)):
+for s, p, o in g.triples((ns.JohnSmith,ns.Works,None)):
   print(s,p,o)

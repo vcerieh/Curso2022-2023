@@ -64,7 +64,7 @@ WHERE {
 UNION
   {
   ?individuals rdf:type ?type .
-  ?type rdfs:subClassOf ns:Person
+  ?type rdfs:subClassOf* ns:Person
   }
 }''',
   initNs = {"ns": NS, "rdf":RDF, "rdfs":RDFS}
@@ -106,7 +106,7 @@ WHERE {
 UNION
   {
   ?individuals rdf:type ?type .
-  ?type rdfs:subClassOf ns:Person .
+  ?type rdfs:subClassOf* ns:Person .
   ?individuals ?properties ?values
   }
 }''',
