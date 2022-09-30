@@ -9,7 +9,7 @@ Original file is located at
 **Task 08: Completing missing data**
 """
 
-!pip install rdflib
+#!pip install rdflib
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2020-2021/master/Assignment4/"
 
 from rdflib import Graph, Namespace, Literal, URIRef
@@ -20,7 +20,7 @@ g2.parse(github_storage+"resources/data02.rdf", format="xml")
 
 """Tarea: lista todos los elementos de la clase Person en el primer grafo (data01.rdf) y completa los campos (given name, family name y email) que puedan faltar con los datos del segundo grafo (data02.rdf). Puedes usar consultas SPARQL o iterar el grafo, o ambas cosas."""
 
-from rdflib.namespace import RDF
+from rdflib.namespace import RDF, RDFS
 from rdflib.plugins.sparql import prepareQuery
 
 print("Incomplete Graph")
@@ -30,32 +30,24 @@ for s, p, o in g1:
 data = Namespace("http://data.org#")
 vcard = Namespace("http://www.w3.org/2001/vcard-rdf/3.0#")
 
-query1 = prepareQuery('''
-  SELECT 
-    ?Subject
-  WHERE { 
-    ?Subject rdf:type ns:Person
-  }
-  ''',
-  initNs = { "ns": data, "rdf": RDF}
-  )
-for r in g1.query(query1):
-  print(r.Subject)
-
-query2 = prepareQuery('''
-  SELECT 
-    ?Subject ?Predicate ?Object
+query = prepareQuery('''
+  SELECT DISTINCT 
+    ?Subject ?Given ?FamilyName ?Email
   WHERE {
-    ?Subject ?Predicate ?Object
-    FILTER(?Predicate=vcard:FN || ?Predicate=vcard:Given || ?Predicate=vcard:EMAIL)
+    ?Subject rdf:type ns:Person.
+    OPTIONAL{?Subject vcard:Given ?Given}
+    OPTIONAL{?Subject vcard:Family ?FamilyName}
+    OPTIONAL{?Subject vcard:EMAIL ?Email}
   }
   ''',
-  initNs = { "vcard": vcard}
+  initNs = { "vcard": vcard, "rdf": RDF, "ns": data }
   )
 
-for r in g2.query(query2):
-  print(r)
-  g1.add(r)
+for r1 in g1.query(query):
+    for r2 in g2.query(query, initBindings={"?Subject":r1.Subject}):
+        if(r1.Given == None and r2.Given != None): g1.add((r1.Subject, vcard.Given, r2.Given))
+        if(r1.FamilyName == None and r2.FamilyName != None): g1.add((r1.Subject, vcard.Family, r2.FamilyName))
+        if(r1.Email == None and r2.Email != None): g1.add((r1.Subject, vcard.EMAIL, r2.Email))
   
 print("Complete Graph")
 
