@@ -69,7 +69,8 @@ for s, p, o in g:
 
 # TO DO
 g.add((ns.UPM, RDF.type, ns.University))
-g.add((ns.UPM, VCARD.AGENT, ns.JohnSmith))
+g.add((ns.worksIn, RDF.type, property.Property))
+g.add((ns.JohnSmith, ns.worksIn, ns.UPM))
 # Visualize the results
 for s, p, o in g:
   print(s,p,o)
