@@ -9,7 +9,7 @@ if __name__ == '__main__':
   g = Graph()
   g.namespace_manager.bind('ns', Namespace("http://somewhere#"), override=False)
   g.namespace_manager.bind('vcard', Namespace("http://www.w3.org/2001/vcard-rdf/3.0#"), override=False)
-  g.parse(github_storage+"example6.rdf", format="xml")
+  g.parse(github_storage+"example5.rdf", format="xml")
   vcard = Namespace("http://www.w3.org/2001/vcard-rdf/3.0/")
   np = Namespace("http://newPropertiesSpace#")
 
