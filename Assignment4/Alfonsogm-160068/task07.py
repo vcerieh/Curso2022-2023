@@ -9,7 +9,7 @@ Original file is located at
 **Task 07: Querying RDF(s)**
 """
 
-!pip install rdflib 
+
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2021-2022/master/Assignment4/course_materials"
 
 """Leemos el fichero RDF de la forma que lo hemos venido haciendo"""
@@ -26,6 +26,7 @@ for s, p, o in g:
 
 """**TASK 7.1: List all subclasses of "Person" with RDFLib and SPARQL**"""
 
+print("\nTask7.1\n")
 from rdflib.namespace import RDF, RDFS
 from rdflib.plugins.sparql import prepareQuery
 ns = Namespace("http://somewhere#")
@@ -34,7 +35,7 @@ vcard = Namespace("http://www.w3.org/2001/vcard-rdf/3.0#")
 q1= prepareQuery('''
 Select ?subj
 Where {
-  ?subj rdfs:subClassOf ns:Person
+  ?subj rdfs:subClassOf/rdfs:subClassOf* ns:Person
 }
 ''',
   initNs = {"ns": ns,"rdfs":RDFS}
@@ -43,17 +44,26 @@ Where {
 for r in g.query(q1):
   print(r.subj)
 print("\n")
+
 for s, p, o in g.triples((None, RDFS.subClassOf, ns.Person)):
   print(s)
+  for s1, p1, o1 in g.triples((None, RDFS.subClassOf, s)):
+    print(s1)
 
 """**TASK 7.2: List all individuals of "Person" with RDFLib and SPARQL (remember the subClasses)**
 
 """
 
+print("\nTask7.2\n")
 q2= prepareQuery('''
 Select ?subj
 Where {
-  ?subj ?p ns:Person
+  {
+    ?subj a ns:Person .
+  } UNION {
+    ?class rdfs:subClassOf/rdfs:subClassOf* ns:Person .
+    ?subj a ?class 
+  }
 }
 ''',
   initNs = {"ns": ns,"rdfs":RDFS}
@@ -62,18 +72,28 @@ Where {
 for r in g.query(q2):
   print(r.subj)
 print("\n")
-for s, p, o in g.triples((None, None, ns.Person)):
+for s, p, o in g.triples((None, RDF.type, ns.Person)):
   print(s)
+for s, p, o in g.triples((None, RDFS.subClassOf, ns.Person)):
+  for s1, p1, o1 in g.triples((None, RDF.type, s)):
+    print(s1)
 
 """**TASK 7.3: List all individuals of "Person" and all their properties including their class with RDFLib and SPARQL**
 
 """
 
+print("\nTask7.3\n")
 q3= prepareQuery('''
 Select ?subj ?p ?obj 
 Where {
-  ?subj ?p ?obj .
-  ?subj ?p1 ns:Person
+  {
+    ?subj a ns:Person .
+    ?subj ?p ?obj
+  } UNION {
+    ?class rdfs:subClassOf/rdfs:subClassOf* ns:Person .
+    ?subj a ?class .
+    ?subj ?p ?obj
+  }
 }
 ''',
   initNs = {"ns": ns,"rdfs":RDFS}
@@ -82,6 +102,12 @@ Where {
 for r in g.query(q3):
   print(r.subj,r.p,r.obj)
 print("\n")
-for s, p, o in g.triples((None, None, ns.Person)):
-  for s1,p1,o1 in g.triples((s,None,None)):
+
+for s, p, o in g.triples((None, RDF.type, ns.Person)):
+  for s1, p1, o1 in g.triples((s, None, None)):
     print(s1,p1,o1)
+
+for s, p, o in g.triples((None, RDFS.subClassOf, ns.Person)):
+  for s1, p1, o1 in g.triples((None, RDF.type, s)):
+    for s2, p2, o2 in g.triples((s1, None, None)):
+      print(s2,p2,o2)
