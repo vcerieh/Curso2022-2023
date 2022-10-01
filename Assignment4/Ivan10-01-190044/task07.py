@@ -53,7 +53,7 @@ WHERE {
         ?i rdf:type ns:Person .
     }
     UNION {
-        ?sCl rdfs:subClassOf ns:Person .
+        ?sCl rdfs:subClassOf* ns:Person .
         ?i rdf:type ?sCl
     }
 }
@@ -92,7 +92,7 @@ q3 = prepareQuery('''
   }UNION{ 
      ?Person rdf:type ?a.
      ?Person ?Prop ?c.
-     ?a rdfs:subClassOf ns:Person
+     ?a rdfs:subClassOf* ns:Person
    }
   }
   ''',
