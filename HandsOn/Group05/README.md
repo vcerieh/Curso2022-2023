@@ -2,6 +2,4 @@
 * Carlos Daniel Agramonte Medina - CarlosD21
 * Rodrigo López García - Rodrigolg01
 * Jorge Verdugo Arroyo - JorgeV75
-
-
-Soy Rodri
+* Pedro Tiemblo Martín - Ptiemblo
