@@ -95,12 +95,12 @@ for s, p, o in g.triples((ns.JaneSmith, None, None)):
 
 
 g.add((ns.UPM, RDF.type, ns.University))
-g.add((ns.JohnSmith, VCARD.Work, ns.UPM))
+g.add((ns.JohnSmith, ns.workAt, ns.UPM))
 
 # Visualize the results
 for s, p, o in g.triples((ns.UPM, RDF.type, None)):
   print(s, p, o)
 
-for s, p, o in g.triples((ns.JohnSmith, VCARD.Work, None)):
+for s, p, o in g.triples((ns.JohnSmith, ns.workAt, None)):
   print(s, p, o)
 

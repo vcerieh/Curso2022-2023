@@ -84,9 +84,7 @@ q2 = prepareQuery('''
   SELECT 
     ?Subject
   WHERE { 
-    { ?Subject rdf:type ns:Person }
-    UNION
-    { ?SubClass rdfs:subClassOf ns:Person . ?Subject rdf:type ?SubClass }
+    { ?SubClass rdfs:subClassOf* ns:Person . ?Subject rdf:type ?SubClass }
   }
   ''',
   initNs = { "rdfs": RDFS, "ns": ns}
@@ -124,9 +122,7 @@ q4 = prepareQuery('''
   SELECT 
     ?Subject ?Predicate ?Object
   WHERE { 
-    { ?Subject rdf:type ns:Person . ?Subject ?Predicate ?Object }
-    UNION
-    { ?SubClass rdfs:subClassOf ns:Person . ?Subject rdf:type ?SubClass . ?Subject ?Predicate ?Object }
+    { ?SubClass rdfs:subClassOf* ns:Person . ?Subject rdf:type ?SubClass . ?Subject ?Predicate ?Object }
   }
   ''',
   initNs = { "rdfs": RDFS, "ns": ns}
@@ -135,4 +131,10 @@ q4 = prepareQuery('''
 
 for r in g.query(q4):
   print(r.Subject, r.Predicate, r.Object)
+
+
+# In[ ]:
+
+
+
 
