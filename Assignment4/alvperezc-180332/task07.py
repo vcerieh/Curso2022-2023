@@ -9,7 +9,6 @@ Original file is located at
 **Task 07: Querying RDF(s)**
 """
 
-!pip install rdflib 
 github_storage = "https://raw.githubusercontent.com/FacultadInformatica-LinkedData/Curso2021-2022/master/Assignment4/course_materials"
 
 """Leemos el fichero RDF de la forma que lo hemos venido haciendo"""
@@ -56,7 +55,7 @@ q2 = prepareQuery("""
     SELECT DISTINCT ?persona WHERE{
     {?persona rdf:type ns:Person.}
     UNION 
-    {?valor rdfs:subClassOf ns:Person.
+    {?valor rdfs:subClassOf* ns:Person.
     ?persona rdf:type ?valor.}
     }
 """, initNs={"ns":ns})
@@ -85,7 +84,7 @@ q3 = prepareQuery("""
     {?persona ?prop ?valor.
     ?persona rdf:type ns:Person}
     UNION
-    {?valor rdfs:subClassOf ns:Person.
+    {?valor rdfs:subClassOf* ns:Person.
     ?persona rdf:type ?valor.
     ?persona ?prop ?otrovalor}
     }
